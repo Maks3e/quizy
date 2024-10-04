@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,14 +14,14 @@
     </style>
 </head>
 <body>
-    <h1>Metallurgy Quiz</h1>
+    <h1>Test z Metaloznastwa</h1>
 
     <form id="quizForm"></form>
 
     <div class="nav-buttons">
-        <button type="button" id="backButton" style="display:none;" onclick="showQuestion(currentQuestion - 1)">Back</button>
-        <button type="button" id="nextButton" style="display:none;" onclick="showQuestion(currentQuestion + 1)">Next</button>
-        <button type="button" id="submitButton" style="display:none;" onclick="submitQuiz()">Submit Quiz</button>
+        <button type="button" id="backButton" style="display:none;" onclick="showQuestion(currentQuestion - 1)">Powróć</button>
+        <button type="button" id="nextButton" style="display:none;" onclick="showQuestion(currentQuestion + 1)">Kolejne zadanie</button>
+        <button type="button" id="submitButton" style="display:none;" onclick="submitQuiz()">Zatwierdź odpowiedzi</button>
     </div>
 
     <div class="final-result" id="finalResult"></div>
@@ -377,7 +377,7 @@
                 questionDiv.appendChild(feedback);
 
                 const checkButton = document.createElement('button');
-                checkButton.textContent = 'Check Answer';
+                checkButton.textContent = 'Sprawdź';
                 checkButton.type = 'button';
                 checkButton.onclick = () => checkAnswer(index, question.a); // Pass correct answer
                 questionDiv.appendChild(checkButton);
@@ -413,17 +413,18 @@
             if (selected) {
                 // Compare selected value directly with the correctAnswer
                 if (selected.value === selectedQuestions[index].options[correctAnswer.charCodeAt(0) - 97]) {
-                    feedbackElement.textContent = "Correct!";
+                    feedbackElement.textContent = "Dobrze!";
                     feedbackElement.className = "result";
                     score++;
                 } else {
                     // Retrieve the full correct answer text from options
                     const correctAnswerText = selectedQuestions[index].options[correctAnswer.charCodeAt(0) - 97];
-                    feedbackElement.textContent = `It is: ${correctAnswerText}`;
+                    const questionText = selectedQuestions[index].q;
+                    feedbackElement.textContent = `${questionText} ${correctAnswerText}`;
                     feedbackElement.className = "result incorrect";
                 }
             } else {
-                feedbackElement.textContent = "Please select an answer.";
+                feedbackElement.textContent = "Proszę, wybierz odpowiedź.";
                 feedbackElement.className = "result incorrect";
             }
         }
@@ -431,8 +432,8 @@
         // Submit the quiz and show final result
         function submitQuiz() {
             const resultText = score >= (totalQuestions / 2) ?
-                               `You passed! Your score is ${score}/${totalQuestions}.` :
-                               `You failed. Your score is ${score}/${totalQuestions}.`;
+                               `Gratulacje! Zdałeś test z wynikiem: ${score}/${totalQuestions}.` :
+                               `Nie udało ci się uzyskać 50%. ${score}/${totalQuestions}.`;
 
             document.getElementById("finalResult").textContent = resultText;
         }
