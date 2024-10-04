@@ -54,14 +54,6 @@ label:hover {
     transform: translateY(-1px);
 }
 
-.correct-answer {
-    background-color: green !important;
-}
-
-.incorrect-answer {
-    background-color: red !important;
-}
-
 .result {
     margin-top: 5px;
     font-size: 16px;
@@ -105,13 +97,13 @@ button {
     font-family: Copperplate;
     background-color: #555;
     color: #f0f0f0;
-    border: none;
+    border: 2px solid #333;
     padding: 10px 15px;
     font-size: 14px;
     font-weight: bold;
     cursor: pointer;
-    border-radius: 5px;
-    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    box-shadow: 0 3px 0 #222, 0 6px 8px rgba(0, 0, 0, 0.4);
     transition: all 0.2s ease;
     margin: 5px;
 }
@@ -126,6 +118,7 @@ button:active {
     background-color: #444;
     box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.6);
 }
+
 
 /* Responsive adjustments for mobile: make everything 35% smaller */
 @media (max-width: 768px) {
@@ -166,4 +159,22 @@ button:active {
     .nav-buttons {
         bottom: 10px;
     }
+}
+.answer-feedback {
+    margin-top: 10px;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #444;  /* Background for feedback */
+    color: white;  /* Text color */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);  /* 3D look */
+    display: none;  /* Initially hidden */
+}
+
+.answer-feedback.correct {
+    background-color: #2e7d32;  /* Green background for correct */
+}
+
+.answer-feedback.incorrect {
+    background-color: #c62828;  /* Red background for incorrect */
 }
