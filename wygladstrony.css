@@ -67,6 +67,7 @@ label:hover {
 
 .final-result {
     margin-top: 10px;
+    margin-bottom: 10px;
     font-size: 18px;
     font-weight: bold;
     position: fixed;
