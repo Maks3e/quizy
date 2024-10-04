@@ -398,21 +398,24 @@
     const feedbackElement = document.getElementById(`feedback${index}`);
 
     if (selected) {
+        const selectedLabel = selected.parentElement;
+
         if (selected.value === selectedQuestions[index].options[correctAnswer.charCodeAt(0) - 97]) {
             feedbackElement.textContent = "Dobrze!";
-            feedbackElement.className = "answer-feedback correct";
+            feedbackElement.className = "result";
+            selectedLabel.classList.add('correct-answer');
+            score++;
         } else {
-            const correctAnswerText = selectedQuestions[index].options[correctAnswer.charCodeAt(0) - 97];
-            feedbackElement.textContent = `Błędnie. Poprawna odpowiedź to: ${correctAnswerText}`;
-            feedbackElement.className = "answer-feedback incorrect";
+            feedbackElement.textContent = "Źle! Spróbuj ponownie.";
+            feedbackElement.className = "result incorrect";
+            selectedLabel.classList.add('incorrect-answer');
         }
     } else {
-        feedbackElement.textContent = "Proszę wybrać odpowiedź.";
-        feedbackElement.className = "answer-feedback incorrect";
+        feedbackElement.textContent = "Proszę, wybierz odpowiedź.";
+        feedbackElement.className = "result incorrect";
     }
-
-    feedbackElement.style.display = "block";
 }
+
 
 
         function submitQuiz() {
