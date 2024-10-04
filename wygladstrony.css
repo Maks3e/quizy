@@ -7,7 +7,8 @@ body {
     padding: 10px;
     border-left: 5px solid black;
     border-right: 5px solid black;
-    overflow-x: hidden; /* Prevent horizontal scrolling */
+    overflow-x: hidden;
+    padding-bottom: 100px; /* Add space for bottom elements to avoid overlap */
 }
 
 h1, h3 {
@@ -65,12 +66,14 @@ label:hover {
 }
 
 .final-result {
-    margin-top: 15px;
+    margin-top: 10px;
     font-size: 18px;
     font-weight: bold;
     position: fixed;
-    bottom: 10px; /* Fix to bottom without movement */
-    width: 100%;
+    bottom: 60px; /* Position above the navigation buttons */
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 20px);
     background-color: #333;
     color: #f0f0f0;
     padding: 10px 0;
@@ -78,9 +81,18 @@ label:hover {
 }
 
 .nav-buttons {
-    margin-top: 10px;
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 20px);
+    background-color: #2D2C35;
+    padding: 10px 0;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.3);
+    z-index: 1; /* Ensure it stays above other elements */
 }
 
+/* Button styles */
 button {
     font-family: Copperplate;
     background-color: #555;
@@ -113,6 +125,7 @@ button:active {
         padding: 5px;
         border-left: 3px solid black;
         border-right: 3px solid black;
+        padding-bottom: 120px; /* Add space for bottom elements */
     }
 
     h1, h3 {
@@ -138,6 +151,11 @@ button:active {
 
     .final-result {
         font-size: 13px;
+        bottom: 80px;
         padding-bottom: 5px;
+    }
+
+    .nav-buttons {
+        bottom: 10px;
     }
 }
