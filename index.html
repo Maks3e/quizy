@@ -1,16 +1,115 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUIZ</title>
+    <title>Test z Metaloznastwa</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        .question { display: none; margin: 20px; }
-        .result { margin-top: 10px; font-size: 18px; font-weight: bold; color: green; }
-        .incorrect { color: red; }
-        .final-result { margin-top: 20px; font-size: 20px; font-weight: bold; }
-        .nav-buttons { margin-top: 20px; }
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            border-left: 5px solid #333;
+            border-right: 5px solid #333;
+        }
+
+        h1, h3 {
+            background: linear-gradient(to right, #333, #444);
+            color: #f0f0f0;
+            padding: 15px 30px;
+            border-radius: 8px;
+            margin: 20px auto;
+            border: 2px solid #444;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .question {
+            display: none;
+            margin: 20px auto;
+            width: 80%;
+            text-align: center;
+            border-bottom: 1px solid #444;
+            padding: 20px;
+            background-color: #2D2C35;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            width: 60%;
+            margin: 15px auto;
+            font-size: 18px;
+            padding: 15px;
+            background-color: #444;
+            color: white;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+        }
+
+        label:hover {
+            background-color: #555;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        .result {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: lightgreen;
+            margin-bottom: 10px;
+        }
+
+        .incorrect {
+            color: red;
+            margin: 10px;
+        }
+
+        .final-result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+        }
+
+        button {
+            font-family: 'Arial', sans-serif;
+            background-color: #555;
+            color: #f0f0f0;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #666;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            background-color: #444;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6);
+        }
     </style>
 </head>
 <body>
@@ -28,310 +127,16 @@
 
     <script>
         let score = 0;
-        const totalQuestions = 30;  // Total number of random questions to pick
-        let currentQuestion = 0; // Track current question index
-        let selectedQuestions = []; // Array to hold selected questions
+        const totalQuestions = 30;
+        let currentQuestion = 0;
+        let selectedQuestions = [];
 
-        // Base of all questions extracted from the document
         const baseQuestions = [
-          { q: "Które z poniższych stwierdzeń NIE jest prawdziwe w przypadku osi krystalograficznych?", a: 'a', options: ['muszą być do siebie wzajemnie prostopadłe', 'są równoległe do krawędzi komórki elementarnej', 'wychodzą z jednego z wierzchołków komórki', 'tworzą prawoskrętny układ współrzędnych'] },
-        { q: "Odmiany alotropowe żelaza: (Fe-α) oraz (Fe-δ) mają następujące struktury krystaliczne:", a: 'd', options: ['odpowiednio RPC (A2) i HZ (A3)', 'obie posiadają strukturę RSC (A1)', 'obie posiadają strukturę RPC (A2)', 'odpowiednio RSC (A1) i RPC (A2)'] },
-        { q: "Minimalna odległość pomiędzy atomami w strukturze RSC (A1) wynosi:", a: 'a', options: ['połowę przekątnej przestrzennej komórki elementarnej (𝑎√3/2)', 'długość przekątnej ściany komórki elementarnej (𝑎√2)', 'połowę przekątnej ściany komórki elementarnej (𝑎√2/2)', 'długość krawędzi komórki elementarnej (a)'] },
-        { q: "Płaszczyzny i kierunki najgęściej wypełnione atomami w strukturze RSC (A1) to:", a: 'a', options: ['płaszczyzny typu {111} i kierunki typu <110>', 'płaszczyzny typu {110} i kierunki typu <111>', 'płaszczyzny typu {100} i kierunki typu <110>', 'płaszczyzny typu {110} i kierunki typu <100>'] },
-        { q: "Odległość między płaszczyznami typu {122} wynosi:", a: 'b', options: ['a/3', '𝑎√5/2', 'a/5', '𝑎√5/5'] },
-        { q: "Pas krystalograficzny jest to:", a: 'c', options: ['zbiór płaszczyzn oraz kierunków o tych samych wskaźnikach', 'zbiór kierunków krystalograficznych równoległych do określonej płaszczyzny', 'zbiór płaszczyzn krystalograficznych równoległych do wspólnego kierunku', 'zbiór kierunków krystalograficznych przechodzących przez określony punkt'] },
-        { q: "Produktem przemiany eutektoidalnej przy chłodzeniu stali jest:", a: 'b', options: ['austenit', 'perlit', 'ferryt', 'ledeburyt'] },
-        { q: "Która faza jest najtwardsza?", a: 'a', options: ['cementyt', 'ferryt', 'austenit', 'ferryt wysokotemperaturowy (ferryt delta)'] },
-        { q: "Pierwiastkiem, który rozpuszczony w roztworze stałym przenosi zdolność do samopasywacji na stopy z żelazem jest:", a: 'a', options: ['chrom', 'nikiel', 'mangan', 'molibden'] },
-        { q: "Stale stosowane na duże konstrukcje wymagające spawania powinny zawierać:", a: 'c', options: ['możliwie dużo węgla', 'dowolną ilość węgla', 'mało węgla', 'dużo pierwiastków zwiększających hartowność'] },
-        { q: "Minimalna odległość pomiędzy atomami w strukturze RSC (A1) wynosi:", a: 'a', options: ['połowę przekątnej przestrzennej komórki elementarnej (𝑎√3/2)', 'długość przekątnej ściany komórki elementarnej (𝑎√2)', 'połowę przekątnej ściany komórki elementarnej (𝑎√2/2)', 'długość krawędzi komórki elementarnej (a)'] },
-        { q: "Płaszczyzny i kierunki najgęściej wypełnione atomami w strukturze RSC (A1) to:", a: 'a', options: ['płaszczyzny typu {111} i kierunki typu <110>', 'płaszczyzny typu {110} i kierunki typu <111>', 'płaszczyzny typu {100} i kierunki typu <110>', 'płaszczyzny typu {110} i kierunki typu <100>'] },
-        { q: "Która z form węgla NIE jest odmianą alotropową?", a: 'd', options: ['grafit', 'fuleren', 'diament', 'grafen'] },
-        { q: "Stal hartowna charakteryzuje się tym, że:", a: 'c', options: ['posiada dużą ciągliwość', 'nadaje się do spawania', 'łatwo poddaje się obróbce cieplnej', 'ma dobrą odporność na korozję'] },
-        { q: "Błąd ułożenia, który powstaje przez wstawienie części warstwy atomowej to:", a: 'b', options: ['błąd podwójny', 'błąd pojedynczy', 'błąd zgodny', 'błąd wewnętrzny'] },
-        { q: "Odmiany alotropowe żelaza (Fe-α) oraz (Fe-γ) mają struktury krystaliczne:", a: 'd', options: ['RPC (A2) i HZ (A3)', 'obie RSC (A1)', 'obie RPC (A2)', 'RSC (A1) i RPC (A2)'] },
-        { q: "Zjawisko ślizgu w metalu oznacza:", a: 'b', options: ['nagłą zmianę struktury krystalicznej', 'podstawowy mechanizm odkształcenia plastycznego', 'wzrost twardości pod wpływem obróbki cieplnej', 'pojawienie się nowych granic ziaren'] },
-        { q: "Najczęściej stosowane metody odlewania to:", a: 'a', options: ['odlewanie do form piaskowych i odlewanie ciśnieniowe', 'odlewanie próżniowe', 'odlewanie do form ceramicznych', 'odlewanie w kokilach'] },
-        { q: "Które z poniższych nie jest rodzajem błędu krystalograficznego:", a: 'd', options: ['punktowe', 'linowe', 'płaszczyznowe', 'błędy wewnętrzne'] },
-        { q: "W układzie krystalograficznym, odległość między płaszczyznami typu {122} wynosi:", a: 'b', options: ['a/3', '𝑎√5/2', 'a/5', '𝑎√5/5'] },
-        { q: "Granica ciągu lim (1 + 1/n)^n, n → ∞ jest równa:", a: 'a', options: ['e', 'e^2', '1', '+∞'] },
-        { q: "Granica funkcji lim (x^2)/(x + 1), x → ∞ jest równa:", a: 'b', options: ['1', '2', '0', '2x'] },
-        { q: "Pochodna funkcji f(x) = tg(x) * ln(x) jest równa:", a: 'd', options: ['(sec^2(x) * ln(x))', 'tg(x) / x', '(1/x) * sec^2(x)', 'ln(x) * sec^2(x) + tg(x) / x'] },
-        { q: "Całka ∫ x^2 dx jest równa:", a: 'c', options: ['0', '(x^3)/3 + C', '(1/3)x^3 + C', 'x^3'] },
-        { q: "Wyznacznik macierzy A = [2, 4, 6; 1, 2, 3; 1, 0, 1] jest równy:", a: 'b', options: ['4', '-4', '0', '-16'] },
-        { q: "Rząd macierzy A = [0, 0, 6; 0, 0, 1; 0, 0, 1] jest równy:", a: 'c', options: ['0', '1', '2', '3'] },
-        { q: "Pierwsze prawo Kirchhoffa dla obwodów elektrycznych:", a: 'a', options: ['Suma algebraiczna wartości chwilowych prądów w węźle obwodu elektrycznego jest równa zeru.', 'Suma algebraiczna wartości chwilowych napięć na elementach pasywnych obwodu.', 'Suma algebraiczna wartości chwilowych sił elektromotorycznych.', 'Suma algebraiczna wartości chwilowych sił magnetomotorycznych.'] },
-        { q: "Jakie jest znaczenie terminu \"histereza magnetyczna\"?", a: 'c', options: ['Zmiana strumienia magnetycznego nie wpływa na indukcję.', 'Zmiany pola magnetycznego są liniowe.', 'Zmiany indukcji magnetycznej nie są proporcjonalne do zmian pola.', 'Indukcja magnetyczna jest stała.'] },
-        { q: "Która definicja zmiennej w języku C++ jest błędna?", a: 'd', options: ['int dana_2', 'int dana2', 'int _dana', 'int 2_dana'] },
-        { q: "W języku C++ instrukcja \"continue\" użyta wewnątrz zagnieżdżonych pętli for spowoduje:", a: 'c', options: ['wykonanie kolejnego obiegu pętli zewnętrznej', 'zakończenie działania pętli wewnętrznej', 'wykonanie kolejnego obiegu pętli wewnętrznej', 'zakończenie działania obu pętli'] },
-        { q: "Wskaźnik twardości Rockwella jest mierzony przez:", a: 'c', options: ['indukcję elektromagnetyczną', 'metodę statyczną', 'metodę dynamiczną', 'metodę chemiczną'] },
-        { q: "Które z poniższych zjawisk nie występuje podczas odpuszczania stali?", a: 'b', options: ['zmiana struktury krystalicznej', 'wzrost twardości', 'zmniejszenie naprężeń wewnętrznych', 'zmniejszenie kruchości'] },
-        { q: "Która z poniższych faz jest fazą austenitu?", a: 'a', options: ['Fe₃C', 'γ-Fe', 'α-Fe', 'Cementyt'] },
-        { q: "Granica przepuszczalności magnetycznej materiału ferromagnetycznego jest związana z:", a: 'd', options: ['ilością atomów', 'gęstością elektronów', 'temperaturą', 'spinami elektronów'] },
-        { q: "Jakie właściwości mają stopy żelaza i węgla o składzie eutektoidalnym?", a: 'c', options: ['twardość i plastyczność', 'małą wytrzymałość', 'wysoką twardość', 'wysoką ciągliwość'] },
-        { q: "Które z poniższych stwierdzeń jest prawdziwe dla stali niskostopowych?", a: 'b', options: ['są odporne na korozję', 'mają lepszą udarność', 'są trudne w obróbce', 'są bardziej kruche'] },
-        { q: "Który z poniższych pierwiastków nie jest używany w stalach narzędziowych?", a: 'd', options: ['wanad', 'molibden', 'chrom', 'tytan'] },
-        { q: "Przyczyną pękania metalu jest:", a: 'a', options: ['wysoka temperatura', 'niska temperatura', 'obróbka mechaniczna', 'wprowadzenie węgla'] },
-        { q: "Jakie znaczenie ma temperatura w procesie odlewania?", a: 'c', options: ['Nie ma znaczenia', 'Tylko zmniejsza czas', 'Wpływa na lepkość metalu', 'Wpływa na czas chłodzenia'] },
-        { q: "Które z poniższych nie jest metodą obróbki cieplnej?", a: 'd', options: ['hartowanie', 'odpuszczanie', 'normalizacja', 'szlifowanie'] },
-        { q: "Które z poniższych stwierdzeń jest prawdziwe w przypadku stali nierdzewnej?", a: 'a', options: ['Jest odporna na korozję', 'Nie ma żadnych właściwości magnetycznych', 'Jest całkowicie odporna na wysokie temperatury', 'Nie podlega utlenieniu'] },
-        { q: "Która z poniższych metod jest stosowana do modyfikacji struktury ziarna w stali?", a: 'c', options: ['Spawanie', 'Odlewanie', 'Wymiana stopów', 'Wytłaczanie'] },
-        { q: "Jakie są właściwości stali o niskiej zawartości węgla?", a: 'b', options: ['Duża twardość', 'Duża plastyczność', 'Duża kruchość', 'Niska wytrzymałość'] },
-        { q: "Co powoduje wprowadzenie molibdenu do stopów żelaza?", a: 'a', options: ['Zwiększa odporność na ciepło', 'Zmniejsza odporność na korozję', 'Zwiększa twardość', 'Zmniejsza udarność'] },
-        { q: "Jakie zastosowanie ma stal nierdzewna?", a: 'b', options: ['Tylko do budowy mostów', 'W przemyśle spożywczym', 'W budowie statków', 'Tylko w konstrukcjach stalowych'] },
-        { q: "Stal z wysoką zawartością węgla charakteryzuje się:", a: 'c', options: ['Wysoką plastycznością', 'Niską twardością', 'Wysoką twardością', 'Małą wytrzymałością'] },
-        { q: "Jaki wpływ ma azot na stal?", a: 'a', options: ['Zwiększa twardość', 'Zmniejsza wytrzymałość', 'Nie ma wpływu', 'Zmniejsza odporność na korozję'] },
-        { q: "Które z poniższych nie jest procesem obróbki cieplnej stali?", a: 'd', options: ['Hartowanie', 'Odpuszczanie', 'Normalizacja', 'Kucie'] },
-        { q: "Jakie są efekty utleniania stali?", a: 'b', options: ['Zmniejszenie twardości', 'Wzrost twardości', 'Wzrost plastyczności', 'Wzrost wytrzymałości'] },
-        { q: "Co oznacza termin 'stabilizacja' w kontekście stopów?", a: 'c', options: ['Zmiana składu chemicznego', 'Zmiana struktury krystalicznej', 'Utrzymanie stabilności właściwości mechanicznych', 'Zmiana twardości'] },
-        { q: "Jakie są właściwości stali przy wysokiej temperaturze?", a: 'c', options: ['Twardość wzrasta', 'Plastyczność maleje', 'Plastyczność wzrasta', 'Wzrost twardości'] },
-        { q: "Które z poniższych stopów są używane do produkcji narzędzi skrawających?", a: 'b', options: ['Stal węglowa', 'Stal szybkotnąca', 'Stal nierdzewna', 'Stal konstrukcyjna'] },
-        { q: "Co oznacza termin 'hartowanie' w kontekście stali?", a: 'd', options: ['Proces redukcji węgla', 'Proces wzmacniania struktury', 'Proces zmniejszenia twardości', 'Proces zwiększenia twardości przez szybkie schłodzenie'] },
-        { q: "Które z poniższych nie jest typem metalu?", a: 'd', options: ['Aluminium', 'Żelazo', 'Miedź', 'Diament'] },
-        { q: "Która z faz w metalach jest najbardziej twarda?", a: 'b', options: ['Alfa', 'Gamma', 'Cementyt', 'Austenit'] },
-        { q: "Jakie zjawisko występuje podczas wytwarzania stali?", a: 'c', options: ['Odparowanie', 'Wytwarzanie gazu', 'Reakcje chemiczne', 'Zmiana gęstości'] },
-        { q: "Jakie jest główne zastosowanie stali w budownictwie?", a: 'a', options: ['Konstrukcje nośne', 'Wykończenie wnętrz', 'Produkcja mebli', 'Podłogi'] },
-        { q: "Co jest głównym czynnikiem wpływającym na odporność stali na korozję?", a: 'a', options: ['Zawartość chromu', 'Zawartość miedzi', 'Zawartość niklu', 'Zawartość cynku'] },
-        { q: "Który z poniższych pierwiastków jest dodawany do stali, aby poprawić jej plastyczność?", a: 'b', options: ['Węgiel', 'Nikiel', 'Mangan', 'Wapń'] },
-        { q: "Który proces obróbczy jest najczęściej stosowany w produkcji stalowych elementów?", a: 'd', options: ['Gięcie', 'Szlifowanie', 'Oplot', 'Kucie'] },
-        { q: "Która z faz w stali jest najtwardsza?", a: 'c', options: ['austenit', 'ferryt', 'cementyt', 'perlity'] },
-        { q: "Jakie zjawisko powoduje, że stal nie jest materiałem izotropowym?", a: 'b', options: ['Krystalizacja', 'Właściwości anizotropowe', 'Odporność na korozję', 'Wzrost twardości'] },
-        { q: "Jakie są główne składniki stali nierdzewnej?", a: 'a', options: ['Węgiel i chrom', 'Mangan i nikiel', 'Żelazo i miedź', 'Węgiel i molibden'] },
-        { q: "Jakie są główne etapy obróbki cieplnej stali?", a: 'b', options: ['Spawanie i cięcie', 'Hartowanie i odpuszczanie', 'Walcowanie i gięcie', 'Wytłaczanie i odlewanie'] },
-        { q: "Co oznacza termin 'krystalizacja' w kontekście stali?", a: 'd', options: ['Przemiana fazowa', 'Zmiana twardości', 'Proces utleniania', 'Proces tworzenia struktury krystalicznej'] },
-        { q: "Jakie właściwości ma stal węglowa o niskiej zawartości węgla?", a: 'c', options: ['Wysoka twardość', 'Duża kruchość', 'Duża plastyczność', 'Mała wytrzymałość'] },
-        { q: "Jakie są skutki dodawania niklu do stali?", a: 'b', options: ['Zmniejsza odporność na korozję', 'Zwiększa odporność na korozję', 'Zmienia kolor stali', 'Zwiększa kruchość'] },
-        { q: "Jakie są podstawowe metody wykrywania wad w stalach?", a: 'c', options: ['Obserwacja wzrokowa', 'Metody chemiczne', 'Badania ultradźwiękowe', 'Analiza mikroskopowa'] },
-        { q: "Jakie są właściwości stali stopowych?", a: 'a', options: ['Wyższa twardość i wytrzymałość', 'Niższa plastyczność', 'Wysoka kruchość', 'Brak odporności na korozję'] },
-        { q: "Co to jest 'normalizacja' w obróbce cieplnej stali?", a: 'b', options: ['Proces wzmacniania', 'Proces wygładzania struktury', 'Proces chłodzenia', 'Proces hartowania'] },
-        { q: "Co oznacza termin 'wyżarzanie' w obróbce cieplnej stali?", a: 'd', options: ['Zmiana struktury', 'Hartowanie w niskiej temperaturze', 'Chłodzenie w oleju', 'Proces ogrzewania do wysokiej temperatury, a następnie powolne chłodzenie'] },
-        { q: "Jakie właściwości ma stal hartowana?", a: 'c', options: ['Mało plastyczna', 'Małe właściwości mechaniczne', 'Wysoka twardość', 'Niska wytrzymałość na rozciąganie'] },
-        { q: "Jakie są zastosowania stali nierdzewnej?", a: 'b', options: ['Tylko w budownictwie', 'W kuchniach i przemyśle spożywczym', 'W pojazdach', 'W elektronice'] },
-        { q: "Które z poniższych nie jest stopem żelaza?", a: 'd', options: ['Stal węglowa', 'Stal nierdzewna', 'Cast iron', 'Aluminium'] },
-        { q: "Które z poniższych pierwiastków dodaje się do stali w celu zwiększenia jej twardości?", a: 'b', options: ['Miedź', 'Węgiel', 'Nikiel', 'Tytan'] },
-        { q: "Jakie zmiany zachodzą w stali podczas odpuszczania?", a: 'a', options: ['Zmniejsza się twardość i zwiększa plastyczność', 'Zwiększa się kruchość', 'Zmienia się struktura', 'Nic się nie zmienia'] },
-        { q: "Co to jest 'duplex' w kontekście stali?", a: 'c', options: ['Stal o niskiej zawartości węgla', 'Stal stopowa', 'Stal o podwójnej strukturze (faza austenitowa i ferrytyczna)', 'Stal o wysokiej twardości'] },
-        { q: "Jaka jest różnica między stalą węglową a stalą stopową?", a: 'b', options: ['Zawartość węgla', 'Zawartość dodatkowych pierwiastków', 'Właściwości mechaniczne', 'Twardość'] },
-        { q: "Jakie właściwości mają stopy aluminium?", a: 'a', options: ['Niska gęstość i dobra odporność na korozję', 'Wysoka twardość', 'Duża plastyczność', 'Niska przewodność cieplna'] },
-        { q: "Która z metod obróbczych jest najczęściej stosowana do wytwarzania elementów stalowych?", a: 'd', options: ['Odlewanie', 'Spawanie', 'Gięcie', 'Kucie'] },
-        { q: "Jakie właściwości mają stopy miedzi?", a: 'b', options: ['Wysoka twardość', 'Doskonała przewodność elektryczna', 'Niska odporność na korozję', 'Wysoka kruchość'] },
-        { q: "Co oznacza termin 'węglowanie' w obróbce stali?", a: 'c', options: ['Zmiana struktury', 'Proces spawania', 'Proces wprowadzania węgla do powierzchni stali', 'Proces chłodzenia stali'] },
-        { q: "Jakie są skutki podgrzewania stali do wysokich temperatur?", a: 'd', options: ['Zwiększenie twardości', 'Spadek plastyczności', 'Zmiana struktury ziaren', 'Wszystkie powyższe'] },
-        { q: "Która z faz jest najważniejsza dla procesu hartowania?", a: 'b', options: ['Ferryt', 'Austenit', 'Cementyt', 'Perlity'] },
-        { q: "Jakie właściwości ma stal stopowa?", a: 'a', options: ['Wyższa odporność na korozję', 'Niższa twardość', 'Wyższa plastyczność', 'Większa kruchość'] },
-        { q: "Co oznacza termin 'przegrzanie' w kontekście stali?", a: 'b', options: ['Zmiana struktury', 'Zbyt wysokie podgrzewanie przed hartowaniem', 'Proces hartowania', 'Proces chłodzenia'] },
-        { q: "Jakie są efekty wprowadzenia manganu do stali?", a: 'a', options: ['Zwiększa twardość i odporność na zużycie', 'Zmniejsza plastyczność', 'Zmniejsza wytrzymałość', 'Zmniejsza odporność na korozję'] },
-        { q: "Który z pierwiastków dodaje się do stali, aby poprawić jej odporność na korozję?", a: 'a', options: ['Chrom', 'Węgiel', 'Mangan', 'Nikiel'] },
-        { q: "Jakie są podstawowe metody badania struktury metali?", a: 'c', options: ['Analiza chemiczna', 'Badania mechaniczne', 'Mikroskopia', 'Termografia'] },
-        { q: "Jakie są zalety stali niskostopowej?", a: 'd', options: ['Mała plastyczność', 'Mała twardość', 'Duża kruchość', 'Wyższa wytrzymałość przy małej wadze'] },
-        { q: "Jakie są podstawowe metody łączenia metali?", a: 'c', options: ['Gięcie i kucie', 'Malowanie i spawanie', 'Spawanie i lutowanie', 'Cięcie i obróbka'] },
-        { q: "Który z pierwiastków jest dodawany do stali, aby zwiększyć jej twardość?", a: 'b', options: ['Węgiel', 'Mangan', 'Nikiel', 'Tytan'] },
-        { q: "Jakie są skutki procesu 'hartowania' stali?", a: 'a', options: ['Zwiększenie twardości', 'Zmniejszenie plastyczności', 'Zmiana struktury ziaren', 'Wszystkie powyższe'] },
-        { q: "Co jest głównym celem procesu 'odlewania' metali?", a: 'd', options: ['Zmniejszenie wagi', 'Zmiana koloru', 'Poprawa struktury', 'Uzyskanie określonego kształtu'] },
-        { q: "Jakie są najważniejsze czynniki wpływające na wytrzymałość stali?", a: 'c', options: ['Zawartość węgla', 'Sposób obróbki cieplnej', 'Oba powyższe', 'Tylko zawartość niklu'] },
-        { q: "Jakie są podstawowe rodzaje obróbki mechanicznej stali?", a: 'b', options: ['Chłodzenie i hartowanie', 'Toczenie i frezowanie', 'Spawanie i lutowanie', 'Wytłaczanie i odlewanie'] },
-        { q: "Jakie są efekty wprowadzenia niklu do stali?", a: 'a', options: ['Zwiększa odporność na korozję', 'Zmniejsza twardość', 'Zwiększa plastyczność', 'Zmniejsza wytrzymałość'] },
-        { q: "Które z poniższych zjawisk nie występuje w stali hartowanej?", a: 'b', options: ['Zmiana struktury', 'Wzrost plastyczności', 'Wzrost twardości', 'Zmiana stanu fizycznego'] },
-        { q: "Jakie są zalety stosowania stali nierdzewnej?", a: 'd', options: ['Niska cena', 'Niska twardość', 'Wysoka waga', 'Odporność na korozję'] },
-        { q: "Jakie procesy chemiczne zachodzą w czasie wytwarzania stali?", a: 'c', options: ['Utlenienie', 'Odparowanie', 'Redukcja i utlenianie', 'Wytwarzanie gazów'] },
-        { q: "Jakie są skutki przegrzania stali?", a: 'b', options: ['Zmniejszenie twardości', 'Zmniejszenie wytrzymałości', 'Wzrost plastyczności', 'Zmiana koloru'] },
-        { q: "Który z poniższych materiałów jest najczęściej używany w produkcji blach stalowych?", a: 'c', options: ['Stal nierdzewna', 'Stal węglowa', 'Stal konstrukcyjna', 'Stal wysokostopowa'] },
-        { q: "Co to jest 'stal borowa'?", a: 'd', options: ['Stal o wysokiej zawartości boru', 'Stal o niskiej twardości', 'Stal o niskiej zawartości węgla', 'Stal, która zawiera bor w celu zwiększenia twardości'] },
-        { q: "Jakie są główne zalety stali stopowej?", a: 'a', options: ['Wysoka wytrzymałość i odporność na korozję', 'Niska cena', 'Niska twardość', 'Niska plastyczność'] },
-        { q: "Które z poniższych stwierdzeń jest prawdziwe dla procesu kucia?", a: 'c', options: ['Metal jest poddawany wysokim temperaturom', 'Metal jest odlewany', 'Metal jest formowany w wyniku działania siły', 'Metal jest chłodzony w wodzie'] },
-        { q: "Jakie właściwości ma stal austenityczna?", a: 'b', options: ['Wysoka kruchość', 'Wysoka plastyczność i odporność na korozję', 'Wysoka twardość', 'Niska wytrzymałość'] },
-        { q: "Jakie procesy zachodzą podczas spawania?", a: 'c', options: ['Utlenianie', 'Redukcja', 'Wytwarzanie ciepła i połączenie materiałów', 'Chłodzenie'] },
-        { q: "Co to jest 'kucie na gorąco'?", a: 'a', options: ['Proces formowania metalu w wysokiej temperaturze', 'Proces formowania metalu w niskiej temperaturze', 'Proces odlewania', 'Proces hartowania'] },
-        { q: "Jakie właściwości mają stopy tytanu?", a: 'd', options: ['Niska gęstość i wysoka twardość', 'Wysoka plastyczność', 'Niska odporność na korozję', 'Wysoka wytrzymałość'] },
-        { q: "Jakie są właściwości metali lekkich?", a: 'b', options: ['Duża gęstość', 'Niska gęstość', 'Wysoka twardość', 'Wysoka temperatura topnienia'] },
-        { q: "Jakie są efekty dodania molibdenu do stali?", a: 'b', options: ['Zmniejsza twardość', 'Zwiększa odporność na wysoką temperaturę', 'Zmniejsza plastyczność', 'Zmniejsza wytrzymałość'] },
-{ q: "Co oznacza termin 'stabilizacja' w kontekście stali?", a: 'd', options: ['Zmiana struktury', 'Zwiększenie twardości', 'Zmiana koloru', 'Utrzymanie właściwości mechanicznych przez dodanie pierwiastków'] },
-{ q: "Jakie właściwości mają stopy miedzi i niklu?", a: 'a', options: ['Wysoka odporność na korozję', 'Niska przewodność cieplna', 'Niska twardość', 'Wysoka kruchość'] },
-{ q: "Które z poniższych stwierdzeń jest prawdziwe w przypadku odlewania?", a: 'c', options: ['Proces jest kosztowny', 'Proces wymaga niskich temperatur', 'Proces pozwala na uzyskanie skomplikowanych kształtów', 'Proces nie wymaga form'] },
-{ q: "Jakie są skutki procesu 'stygnięcia' stali?", a: 'b', options: ['Zwiększenie twardości', 'Zmniejszenie plastyczności', 'Wzrost kruchości', 'Zmiana koloru'] },
-{ q: "Jakie właściwości ma stal odporna na wysokie temperatury?", a: 'a', options: ['Duża wytrzymałość i odporność na odkształcenia', 'Niska gęstość', 'Wysoka plastyczność', 'Niska twardość'] },
-{ q: "Który proces nie jest stosowany w przemyśle stalowym?", a: 'd', options: ['Spawanie', 'Wytłaczanie', 'Kucie', 'Malowanie'] },
-{ q: "Co to jest 'stop' w kontekście materiałów metalowych?", a: 'c', options: ['Materiał nieorganiczny', 'Związek chemiczny', 'Mieszanka metali', 'Czysty metal'] },
-{ q: "Jakie są podstawowe cechy metali nieżelaznych?", a: 'b', options: ['Wysoka twardość', 'Niska gęstość', 'Wysoka kruchość', 'Duża wytrzymałość'] },
-{ q: "Jakie właściwości ma stal sprężynowa?", a: 'c', options: ['Duża kruchość', 'Niska twardość', 'Wysoka plastyczność i elastyczność', 'Wysoka wytrzymałość'] },
-{ q: "Jakie są główne czynniki wpływające na właściwości mechaniczne stali?", a: 'd', options: ['Zawartość węgla', 'Proces obróbczy', 'Metoda produkcji', 'Wszystkie powyższe'] },
-{ q: "Jakie właściwości ma stal konstrukcyjna?", a: 'b', options: ['Niska wytrzymałość', 'Wysoka odporność na obciążenia', 'Wysoka kruchość', 'Niska plastyczność'] },
-{ q: "Co to jest 'szlifowanie'?", a: 'c', options: ['Proces chłodzenia', 'Proces łączenia metali', 'Proces obróbki powierzchniowej metali', 'Proces odlewania'] },
-{ q: "Jakie są zalety stali wysokostopowej?", a: 'a', options: ['Wyższa odporność na korozję i wysoką temperaturę', 'Niższa twardość', 'Zmniejszona plastyczność', 'Niższa wytrzymałość'] },
-{ q: "Jakie są główne metody wykrywania wad w materiałach metalowych?", a: 'c', options: ['Inspekcja wzrokowa', 'Metody chemiczne', 'Badania nieniszczące', 'Analiza mikroskopowa'] },
-{ q: "Jakie są skutki dodania węgla do stali?", a: 'b', options: ['Zmniejszenie twardości', 'Zwiększenie twardości', 'Zmniejszenie wytrzymałości', 'Zwiększenie plastyczności'] },
-{ q: "Co oznacza termin 'spawanie'?", a: 'a', options: ['Proces łączenia materiałów za pomocą ciepła', 'Proces odlewania', 'Proces hartowania', 'Proces formowania metalu'] },
-{ q: "Jakie są podstawowe rodzaje stali nierdzewnej?", a: 'c', options: ['Stal węglowa', 'Stal stopowa', 'Stal austenityczna', 'Stal niskostopowa'] },
-{ q: "Jakie są cechy charakterystyczne stali stopowej?", a: 'd', options: ['Wysoka twardość', 'Wysoka kruchość', 'Niska odporność na korozję', 'Wysoka wytrzymałość przy niskiej wadze'] },
-{ q: "Jakie są główne zalety procesu 'wytłaczania'?", a: 'c', options: ['Wysoka twardość', 'Duża kruchość', 'Możliwość uzyskania skomplikowanych kształtów', 'Niska odporność na korozję'] },
-{ q: "Co oznacza termin 'obróbka cieplna'?", a: 'b', options: ['Proces wytwarzania metali', 'Proces zmiany właściwości materiałów poprzez podgrzewanie i chłodzenie', 'Proces łączenia metali', 'Proces malowania metali'] },
-{ q: "Jakie są główne etapy procesu produkcji stali?", a: 'd', options: ['Wydobycie surowców, topnienie, odlewanie', 'Obróbka, chłodzenie, pakowanie', 'Transport, sprzedaż, produkcja', 'Wydobycie surowców, produkcja, obróbka'] },
-{ q: "Jakie są skutki dodania chromu do stali?", a: 'c', options: ['Zmniejszenie twardości', 'Zmniejszenie wytrzymałości', 'Zwiększenie odporności na korozję', 'Zmiana koloru'] },
-{ q: "Które z poniższych stwierdzeń jest prawdziwe dla metali?", a: 'b', options: ['Metale są zawsze twarde', 'Metale mają wysoką przewodność cieplną', 'Metale nie mają gęstości', 'Metale są zawsze plastyczne'] },
-{ q: "Jakie są główne cechy stali stopowej?", a: 'a', options: ['Wysoka odporność na korozję', 'Niska twardość', 'Wysoka kruchość', 'Niska plastyczność'] },
-{ q: "Co to jest 'spawanie MIG/MAG'?", a: 'd', options: ['Proces odlewania', 'Proces wytwarzania', 'Proces hartowania', 'Proces spawania z użyciem gazu osłonowego'] },
-{ q: "Jakie właściwości ma stal manganowa?", a: 'c', options: ['Niska wytrzymałość', 'Niska odporność na korozję', 'Wysoka twardość i odporność na zużycie', 'Niska plastyczność'] },
-{ q: "Jakie są główne zastosowania stali szybkotnącej?", a: 'a', options: ['Narzędzia skrawające', 'Budownictwo', 'Produkcja samochodów', 'Elementy elektroniczne'] },
-{ q: "Co to jest 'wytwarzanie stali'?", a: 'b', options: ['Proces łączenia metali', 'Proces produkcji stali z surowców', 'Proces łączenia stali z innymi materiałami', 'Proces obróbki cieplnej'] },
-{ q: "Jakie są cechy charakterystyczne stali niskostopowej?", a: 'd', options: ['Duża kruchość', 'Niska twardość', 'Niska wytrzymałość', 'Dobra plastyczność i odporność na korozję'] },
-{ q: "Jakie są skutki odpuszczania stali?", a: 'c', options: ['Zwiększenie twardości', 'Zmniejszenie plastyczności', 'Zwiększenie udarności i plastyczności', 'Zmiana koloru'] },
-{ q: "Jakie właściwości ma stal sprężynowa?", a: 'b', options: ['Duża kruchość', 'Wysoka sprężystość i elastyczność', 'Wysoka twardość', 'Niska wytrzymałość'] },
-{ q: "Co to jest 'hartowanie' stali?", a: 'a', options: ['Proces szybkiego chłodzenia stali', 'Proces wytwarzania stali', 'Proces spawania', 'Proces malowania stali'] },
-{ q: "Które z poniższych zjawisk występuje podczas wytwarzania stali?", a: 'c', options: ['Przegrzanie', 'Zmiana stanu fizycznego', 'Utlenienie i redukcja', 'Zmiana twardości'] },
-{ q: "Jakie są główne metody obróbcze stosowane w przemyśle stalowym?", a: 'b', options: ['Odlewanie i malowanie', 'Kucie i szlifowanie', 'Spawanie i wytłaczanie', 'Chłodzenie i hartowanie'] },
-{ q: "Jakie są zalety stosowania stali stopowej?", a: 'a', options: ['Wysoka wytrzymałość i odporność na korozję', 'Niska cena', 'Duża kruchość', 'Niska plastyczność'] },
-{ q: "Jakie procesy chemiczne zachodzą w czasie obróbki cieplnej stali?", a: 'd', options: ['Utlenienie', 'Redukcja', 'Wytwarzanie gazów', 'Wszystkie powyższe'] },
-{ q: "Co oznacza termin 'węglowanie' w kontekście stali?", a: 'b', options: ['Proces zmiany struktury', 'Proces wprowadzania węgla do stali', 'Proces obróbki cieplnej', 'Proces spawania'] },
-{ q: "Jakie są cechy charakterystyczne stali nierdzewnej?", a: 'c', options: ['Niska twardość', 'Wysoka plastyczność', 'Odporność na korozję', 'Duża kruchość'] },
-{ q: "Jakie są główne zastosowania stali narzędziowej?", a: 'a', options: ['Produkcja narzędzi skrawających', 'Budownictwo', 'Produkcja pojazdów', 'Wytwarzanie dekoracji'] },
-{ q: "Jakie są główne metody detekcji wad w materiałach metalowych?", a: 'b', options: ['Użycie mikroskopu', 'Metody nieniszczące', 'Zwykła obserwacja', 'Analiza chemiczna'] },
-{ q: "Co to jest 'spawanie elektryczne'?", a: 'a', options: ['Proces łączenia metali z użyciem prądu elektrycznego', 'Proces odlewania', 'Proces chłodzenia', 'Proces malowania'] },
-{ q: "Jakie są efekty obróbki cieplnej stali?", a: 'c', options: ['Zmniejszenie twardości', 'Zmiana koloru', 'Zmiana struktury i właściwości mechanicznych', 'Wzrost plastyczności'] },
-{ q: "Jakie są zalety stali szybkotnącej?", a: 'a', options: ['Wysoka twardość i odporność na zużycie', 'Duża kruchość', 'Niska wytrzymałość', 'Niska twardość'] },
-{ q: "Jakie są cechy charakterystyczne stali wysokostopowej?", a: 'b', options: ['Niska wytrzymałość', 'Wysoka odporność na korozję i wysoką temperaturę', 'Duża kruchość', 'Niska twardość'] },
-{ q: "Jakie są skutki procesu 'nawęglania' stali?", a: 'c', options: ['Zmniejszenie twardości', 'Zmniejszenie wytrzymałości', 'Zwiększenie twardości powierzchniowej', 'Zmniejszenie plastyczności'] },
-{ q: "Co oznacza termin 'hartowanie' stali?", a: 'd', options: ['Proces ogrzewania metalu', 'Proces malowania', 'Proces łączenia metali', 'Proces szybkiego chłodzenia stali'] },
-{ q: "Jakie właściwości mają stopy tytanu?", a: 'a', options: ['Wysoka odporność na korozję i mała gęstość', 'Niska plastyczność', 'Niska wytrzymałość', 'Duża kruchość'] },
-{ q: "Jakie są główne zastosowania stali węglowej?", a: 'b', options: ['Wytwarzanie narzędzi skrawających', 'Budownictwo i przemysł maszynowy', 'Produkcja biżuterii', 'Odzież'] },
-{ q: "Jakie są główne cechy charakterystyczne metali szlachetnych?", a: 'c', options: ['Niska gęstość', 'Niska przewodność elektryczna', 'Wysoka odporność na korozję', 'Duża kruchość'] },
-{ q: "Jakie są podstawowe metody łączenia metali?", a: 'c', options: ['Malowanie', 'Spawanie i odlewanie', 'Spawanie i lutowanie', 'Szlifowanie'] },
-{ q: "Jakie właściwości ma stal martenzytyczna?", a: 'b', options: ['Duża plastyczność', 'Wysoka twardość', 'Niska wytrzymałość', 'Duża kruchość'] },
-{ q: "Jakie są skutki dodania niklu do stali?", a: 'a', options: ['Zwiększenie odporności na korozję', 'Zmniejszenie twardości', 'Wzrost kruchości', 'Zmniejszenie plastyczności'] },
-{ q: "Co to jest 'spawanie TIG'?", a: 'd', options: ['Spawanie z użyciem gazu osłonowego', 'Proces wytwarzania', 'Proces gięcia', 'Spawanie z użyciem elektrody wolframowej'] },
-{ q: "Jakie są właściwości stali węglowej?", a: 'c', options: ['Wysoka odporność na korozję', 'Niska plastyczność', 'Wysoka twardość i wytrzymałość', 'Duża kruchość'] },
-{ q: "Jakie są podstawowe etapy procesu odlewania?", a: 'b', options: ['Przygotowanie formy, topnienie metalu, wlewanie', 'Topnienie metalu, wlewanie, chłodzenie', 'Wytwarzanie, chłodzenie, formowanie', 'Topnienie, spawanie, chłodzenie'] },
-{ q: "Jakie są główne zastosowania stali kwasoodpornej?", a: 'a', options: ['Przemysł chemiczny', 'Budownictwo', 'Produkcja narzędzi', 'Przemysł elektroniczny'] },
-{ q: "Co to jest 'fuzjonowanie' metali?", a: 'c', options: ['Proces chłodzenia', 'Proces utleniania', 'Proces topnienia metali w wysokiej temperaturze', 'Proces łączenia metali'] },
-{ q: "Jakie są właściwości stopów aluminium?", a: 'a', options: ['Niska gęstość i dobra przewodność', 'Wysoka twardość', 'Duża kruchość', 'Niska odporność na korozję'] },
-{ q: "Jakie są podstawowe metody badania wytrzymałości materiałów metalowych?", a: 'd', options: ['Badania chemiczne', 'Analiza wizualna', 'Badania ultradźwiękowe', 'Badania mechaniczne'] },
-{ q: "Jakie są główne zalety stali węglowej w porównaniu do innych stali?", a: 'a', options: ['Niska cena i dobra dostępność', 'Wysoka odporność na korozję', 'Wysoka twardość', 'Duża plastyczność'] },
-{ q: "Co to jest 'spawanie gazowe'?", a: 'b', options: ['Spawanie przy użyciu prądu elektrycznego', 'Spawanie przy użyciu palnika gazowego', 'Spawanie bez użycia ciepła', 'Spawanie przy użyciu lasera'] },
-{ q: "Jakie są skutki utlenienia stali?", a: 'c', options: ['Wzrost twardości', 'Zmniejszenie plastyczności', 'Korozja', 'Zmiana koloru'] },
-{ q: "Jakie właściwości mają stopy żelaza i węgla o składzie eutektoidalnym?", a: 'd', options: ['Twardość i plastyczność', 'Niska wytrzymałość', 'Małą kruchość', 'Wysoką twardość'] },
-{ q: "Jakie są główne metody obróbki materiałów metalowych?", a: 'a', options: ['Obróbka mechaniczna i cieplna', 'Proces wytwarzania', 'Malowanie i wykończenie', 'Wytłaczanie i cięcie'] },
-{ q: "Co to jest 'stal stopowa'?", a: 'c', options: ['Stal o niskiej zawartości węgla', 'Stal o wysokiej twardości', 'Stal, która zawiera dodatkowe pierwiastki dla poprawy właściwości', 'Stal, która nie jest poddawana obróbce cieplnej'] },
-{ q: "Jakie są efekty wprowadzenia molibdenu do stopów stali?", a: 'b', options: ['Zmniejszenie twardości', 'Zwiększenie odporności na ciepło', 'Zmniejszenie plastyczności', 'Zmniejszenie wytrzymałości'] },
-{ q: "Jakie są główne cechy charakterystyczne metali nieżelaznych?", a: 'd', options: ['Niska gęstość', 'Niska przewodność elektryczna', 'Wysoka twardość', 'Wysoka odporność na korozję'] },
-{ q: "Co to jest 'wytwarzanie stali metodą elektrolityczną'?", a: 'c', options: ['Proces odlewania', 'Proces obróbczy', 'Proces produkcji stali z użyciem elektrolizy', 'Proces spawania'] },
-{ q: "Jakie są główne zastosowania stali narzędziowej?", a: 'b', options: ['Budownictwo', 'Produkcja narzędzi skrawających', 'Produkcja biżuterii', 'Przemysł elektroniczny'] },
-{ q: "Jakie są efekty obróbki cieplnej na strukturę stali?", a: 'b', options: ['Zmiana koloru', 'Zmiana struktury ziaren', 'Zmniejszenie twardości', 'Zmniejszenie wytrzymałości'] },
-{ q: "Jakie są główne metody badania twardości metali?", a: 'a', options: ['Metoda Rockwella', 'Metoda chemiczna', 'Metoda optyczna', 'Metoda mechaniczna'] },
-{ q: "Co to jest 'spawanie elektryczne'?", a: 'c', options: ['Proces wytwarzania', 'Proces odlewania', 'Proces łączenia metali z użyciem prądu elektrycznego', 'Proces chłodzenia'] },
-{ q: "Jakie są główne zastosowania stali w budownictwie?", a: 'b', options: ['Wytwarzanie narzędzi', 'Konstrukcje nośne i elementy wykończeniowe', 'Produkcja pojazdów', 'Odzież'] },
-{ q: "Jakie właściwości ma stal sprężynowa?", a: 'a', options: ['Wysoka elastyczność i sprężystość', 'Niska twardość', 'Wysoka kruchość', 'Duża gęstość'] },
-{ q: "Jakie są skutki procesu 'nawęglania' stali?", a: 'c', options: ['Zmniejszenie twardości', 'Zmniejszenie wytrzymałości', 'Zwiększenie twardości powierzchniowej', 'Zmiana koloru'] },
-{ q: "Jakie są cechy charakterystyczne stali kwasoodpornej?", a: 'd', options: ['Niska twardość', 'Duża kruchość', 'Niska plastyczność', 'Wysoka odporność na korozję'] },
-{ q: "Jakie są główne metody obróbki cieplnej?", a: 'b', options: ['Hartowanie i malowanie', 'Hartowanie i odpuszczanie', 'Spawanie i cięcie', 'Wytłaczanie i szlifowanie'] },
-{ q: "Jakie są zalety stali wysokostopowej?", a: 'a', options: ['Wysoka odporność na korozję', 'Duża kruchość', 'Niska wytrzymałość', 'Wysoka plastyczność'] },
-{ q: "Co to jest 'fuzjonowanie' w kontekście stali?", a: 'b', options: ['Proces spawania', 'Proces topnienia metali w wysokiej temperaturze', 'Proces gięcia', 'Proces wytłaczania'] },
-{ q: "Jakie są główne metody kształtowania metali?", a: 'a', options: ['Kucie, wytłaczanie, walcowanie', 'Spawanie i malowanie', 'Chłodzenie i ogrzewanie', 'Odlewanie i formowanie'] },
-{ q: "Jakie są zalety stali szybkotnącej?", a: 'c', options: ['Duża kruchość', 'Niska twardość', 'Wysoka twardość i odporność na zużycie', 'Niska wytrzymałość'] },
-{ q: "Co to jest 'hartowanie'?", a: 'd', options: ['Proces topnienia', 'Proces łączenia metali', 'Proces chłodzenia', 'Proces szybkiego chłodzenia stali po podgrzaniu'] },
-{ q: "Jakie są główne właściwości stali nierdzewnej?", a: 'b', options: ['Niska twardość', 'Wysoka odporność na korozję', 'Duża kruchość', 'Niska wytrzymałość'] },
-{ q: "Jakie są skutki 'nawęglania' stali?", a: 'a', options: ['Zwiększenie twardości powierzchniowej', 'Zmniejszenie twardości', 'Zmniejszenie wytrzymałości', 'Zmiana koloru'] },
-{ q: "Jakie właściwości mają stopy miedzi?", a: 'c', options: ['Wysoka twardość', 'Niska gęstość', 'Doskonała przewodność elektryczna', 'Niska odporność na korozję'] },
-{ q: "Jakie są główne zastosowania stali konstrukcyjnej?", a: 'b', options: ['Narzędzia skrawające', 'Budownictwo', 'Przemysł chemiczny', 'Produkcja mebli'] },
-{ q: "Co oznacza termin 'spawanie TIG'?", a: 'd', options: ['Proces odlewania', 'Proces spawania z użyciem palnika', 'Proces spawania przy użyciu ciepła', 'Proces spawania z użyciem elektrody wolframowej'] },
-{ q: "Jakie są efekty podgrzewania stali do wysokich temperatur?", a: 'b', options: ['Wzrost twardości', 'Zmiana struktury ziaren', 'Wzrost plastyczności', 'Zmiana koloru'] },
-{ q: "Jakie są główne metody wykrywania wad materiałów metalowych?", a: 'c', options: ['Metody chemiczne', 'Analiza wizualna', 'Metody nieniszczące', 'Badania mikrostrukturalne'] },
-{ q: "Jakie są główne cechy stali niskostopowej?", a: 'a', options: ['Wysoka wytrzymałość przy małej wadze', 'Niska twardość', 'Duża kruchość', 'Wysoka odporność na korozję'] },
-{ q: "Co to jest 'odlew'?", a: 'c', options: ['Proces formowania metali przez gięcie', 'Proces łączenia metali', 'Proces wytwarzania przedmiotów metalowych poprzez wlewanie roztopionego metalu do formy', 'Proces spawania'] },
-{ q: "Jakie są główne właściwości stali szybkotnącej?", a: 'b', options: ['Niska twardość', 'Wysoka odporność na zużycie', 'Wysoka kruchość', 'Duża plastyczność'] },
-{ q: "Jakie są skutki wprowadzenia niklu do stali?", a: 'a', options: ['Zwiększenie odporności na korozję', 'Zmniejszenie twardości', 'Wzrost kruchości', 'Zmniejszenie plastyczności'] },
-{ q: "Jakie są główne etapy produkcji stali?", a: 'b', options: ['Wydobycie, topnienie, odlewanie', 'Wydobycie, przetwarzanie, produkcja', 'Topnienie, wytłaczanie, chłodzenie', 'Wytwarzanie, chłodzenie, malowanie'] },
-{ q: "Jakie właściwości mają stopy żelaza i miedzi?", a: 'c', options: ['Wysoka twardość', 'Niska odporność na korozję', 'Dobra przewodność elektryczna', 'Duża kruchość'] },
-{ q: "Jakie są główne metody obróbki cieplnej stali?", a: 'd', options: ['Spawanie i wytłaczanie', 'Malowanie i chłodzenie', 'Proces wytwarzania', 'Hartowanie i odpuszczanie'] },
-{ q: "Jakie są główne zastosowania stali stopowej?", a: 'b', options: ['Przemysł chemiczny', 'Narzędzia skrawające i elementy konstrukcyjne', 'Produkcja odzieży', 'Produkcja biżuterii'] },
-{ q: "Jakie są główne zalety stali kwasoodpornej?", a: 'a', options: ['Wysoka odporność na korozję', 'Niska wytrzymałość', 'Wysoka kruchość', 'Niska twardość'] },
-{ q: "Jakie są skutki procesu 'hartowania'?", a: 'b', options: ['Zmniejszenie twardości', 'Zwiększenie twardości', 'Zmiana koloru', 'Wzrost kruchości'] },
-{ q: "Jakie są główne cechy stali austenitycznej?", a: 'a', options: ['Wysoka odporność na korozję', 'Duża kruchość', 'Niska twardość', 'Wysoka plastyczność'] },
-{ q: "Co to jest 'metoda wytapiania'?", a: 'b', options: ['Proces odlewania', 'Proces wytwarzania stali przez topnienie surowców', 'Proces spawania', 'Proces chłodzenia'] },
-{ q: "Jakie są główne zastosowania stali węglowej?", a: 'b', options: ['Wytwarzanie narzędzi skrawających', 'Budownictwo i przemysł maszynowy', 'Produkcja biżuterii', 'Przemysł elektroniczny'] },
-{ q: "Jakie właściwości mają stopy niklu?", a: 'c', options: ['Niska twardość', 'Wysoka kruchość', 'Wysoka odporność na korozję i ciepło', 'Niska gęstość'] },
-{ q: "Jakie są efekty podgrzewania metali do wysokich temperatur?", a: 'b', options: ['Wzrost twardości', 'Zmiana struktury ziaren', 'Zmniejszenie plastyczności', 'Zmiana koloru'] },
-{ q: "Jakie są główne metody obróbki materiałów metalowych?", a: 'd', options: ['Wytłaczanie i malowanie', 'Proces chłodzenia', 'Proces odlewania', 'Kucie, wytłaczanie, walcowanie'] },
-{ q: "Jakie są główne zalety stali szybkotnącej?", a: 'a', options: ['Wysoka twardość i odporność na zużycie', 'Duża kruchość', 'Niska wytrzymałość', 'Niska twardość'] },
-{ q: "Co to jest 'spawanie MAG'?", a: 'c', options: ['Proces odlewania', 'Proces spawania przy użyciu palnika', 'Proces spawania z użyciem gazu osłonowego', 'Proces chłodzenia'] },
-{ q: "Jakie są główne zastosowania stali stopowej?", a: 'b', options: ['Przemysł chemiczny', 'Narzędzia skrawające i elementy konstrukcyjne', 'Produkcja odzieży', 'Produkcja biżuterii'] },
-{ q: "Jakie są główne cechy stali kwasoodpornej?", a: 'b', options: ['Niska twardość', 'Wysoka odporność na korozję', 'Wysoka kruchość', 'Niska wytrzymałość'] },
-{ q: "Jakie są skutki 'węglowania' stali?", a: 'c', options: ['Zmniejszenie twardości', 'Zmniejszenie wytrzymałości', 'Zwiększenie twardości powierzchniowej', 'Zmiana koloru'] },
-{ q: "Jakie właściwości mają stopy tytanu?", a: 'b', options: ['Niska gęstość', 'Wysoka odporność na korozję i mała gęstość', 'Niska twardość', 'Duża kruchość'] },
-{ q: "Jakie są główne metody produkcji stali?", a: 'b', options: ['Odlewanie', 'Wydobycie, przetwarzanie, produkcja', 'Proces wytwarzania', 'Spawanie'] },
-{ q: "Jakie są główne zastosowania stali kwasoodpornej?", a: 'a', options: ['Przemysł chemiczny', 'Budownictwo', 'Produkcja narzędzi', 'Przemysł elektroniczny'] },
-{ q: "Co oznacza termin 'hartowanie'?", a: 'd', options: ['Proces topnienia', 'Proces łączenia metali', 'Proces chłodzenia', 'Proces szybkiego chłodzenia stali po podgrzaniu'] },
-{ q: "Jakie są skutki 'spawania' dla metalu?", a: 'c', options: ['Zmniejszenie twardości', 'Wzrost plastyczności', 'Zmiana struktury ziaren', 'Zmniejszenie wytrzymałości'] },
-{ q: "Jakie są główne cechy stali austenitycznej?", a: 'a', options: ['Wysoka odporność na korozję', 'Niska twardość', 'Duża kruchość', 'Wysoka plastyczność'] },
-{ q: "Jakie są główne metody badania twardości stali?", a: 'b', options: ['Metoda chemiczna', 'Metoda Rockwella', 'Metoda optyczna', 'Metoda mechaniczna'] },
-{ q: "Jakie są zalety stali stopowej?", a: 'd', options: ['Duża kruchość', 'Niska wytrzymałość', 'Wysoka twardość', 'Wyższa wytrzymałość przy małej wadze'] },
-{ q: "Co to jest 'nawęglanie' stali?", a: 'b', options: ['Proces łączenia metali', 'Proces wprowadzania węgla do stali', 'Proces obróbki cieplnej', 'Proces spawania'] },
-{ q: "Jakie są skutki procesu 'odpuszczania'?", a: 'c', options: ['Zmniejszenie twardości', 'Zmniejszenie plastyczności', 'Zwiększenie udarności', 'Wzrost kruchości'] },
-{ q: "Jakie są główne metody obróbki stali?", a: 'd', options: ['Kucie', 'Odlewanie', 'Spawanie', 'Hartowanie i odpuszczanie'] },
-{ q: "Jakie są efekty utlenienia stali?", a: 'a', options: ['Korozja', 'Wzrost twardości', 'Zmniejszenie plastyczności', 'Zmiana koloru'] },
-{ q: "Jakie są główne cechy stali sprężynowej?", a: 'b', options: ['Duża kruchość', 'Wysoka elastyczność i sprężystość', 'Niska twardość', 'Wysoka wytrzymałość'] },
-{ q: "Co to jest 'odlew'? ", a: 'b', options: ['Proces formowania metali przez gięcie', 'Proces wytwarzania przedmiotów metalowych poprzez wlewanie roztopionego metalu do formy', 'Proces spawania', 'Proces chłodzenia'] },
-{ q: "Jakie są główne właściwości stali węglowej?", a: 'a', options: ['Wysoka twardość', 'Niska wytrzymałość', 'Duża kruchość', 'Wysoka plastyczność'] },
-{ q: "Jakie są główne zastosowania stali wysokostopowej?", a: 'c', options: ['Przemysł chemiczny', 'Budownictwo', 'Narzędzia skrawające', 'Przemysł elektroniczny'] },
-{ q: "Jakie są zalety stali kwasoodpornej?", a: 'b', options: ['Niska twardość', 'Wysoka odporność na korozję', 'Duża kruchość', 'Niska wytrzymałość'] },
-{ q: "Jakie są główne metody kształtowania metali?", a: 'a', options: ['Kucie, wytłaczanie, walcowanie', 'Spawanie i malowanie', 'Chłodzenie i ogrzewanie', 'Odlewanie i formowanie'] },
-{ q: "Jakie są podstawowe metody kształtowania metali?", a: 'c', options: ['Tłoczenie', 'Wytłaczanie', 'Kucie i walcowanie', 'Malowanie'] },
-{ q: "Jakie właściwości mają stopy cynku?", a: 'b', options: ['Niska twardość', 'Wysoka odporność na korozję', 'Wysoka kruchość', 'Niska gęstość'] },
-{ q: "Co to jest 'spawanie elektryczne'?", a: 'd', options: ['Proces odlewania', 'Proces formowania metali', 'Proces łączenia materiałów bez użycia ciepła', 'Proces łączenia materiałów z użyciem prądu elektrycznego'] },
-{ q: "Jakie są główne efekty wprowadzenia miedzi do stopów?", a: 'a', options: ['Zwiększenie przewodności elektrycznej', 'Zmniejszenie twardości', 'Zmniejszenie odporności na korozję', 'Wzrost kruchości'] },
-{ q: "Jakie są główne cechy stali węglowej?", a: 'b', options: ['Wysoka odporność na korozję', 'Duża twardość i wytrzymałość', 'Niska plastyczność', 'Duża kruchość'] },
-{ q: "Jakie są skutki hartowania stali?", a: 'c', options: ['Zmniejszenie twardości', 'Zmiana koloru', 'Zwiększenie twardości', 'Wzrost plastyczności'] },
-{ q: "Co to jest 'fuzjonowanie' w kontekście metali?", a: 'b', options: ['Proces łączenia metali', 'Proces topnienia metali w wysokiej temperaturze', 'Proces spawania', 'Proces formowania'] },
-{ q: "Jakie są główne metody obróbki cieplnej stali?", a: 'a', options: ['Hartowanie i odpuszczanie', 'Wytłaczanie', 'Spawanie', 'Chłodzenie'] },
-{ q: "Jakie są główne właściwości stali narzędziowej?", a: 'c', options: ['Wysoka kruchość', 'Niska twardość', 'Wysoka twardość i odporność na zużycie', 'Duża plastyczność'] },
-{ q: "Jakie są zalety stali kwasoodpornej?", a: 'a', options: ['Wysoka odporność na korozję', 'Niska wytrzymałość', 'Wysoka kruchość', 'Niska twardość'] },
-{ q: "Jakie są główne metody badania struktury metali?", a: 'b', options: ['Analiza chemiczna', 'Mikroskopia', 'Badania mechaniczne', 'Analiza wizualna'] },
-{ q: "Jakie są efekty wprowadzenia miedzi do stopów?", a: 'c', options: ['Zmniejszenie twardości', 'Zmniejszenie odporności na korozję', 'Zwiększenie przewodności elektrycznej', 'Zmniejszenie plastyczności'] },
-{ q: "Co to jest 'spawanie MIG'?", a: 'd', options: ['Proces odlewania', 'Proces spawania przy użyciu lasera', 'Proces spawania przy użyciu elektrody', 'Proces spawania z użyciem drutu w osłonie gazu'] },
-{ q: "Jakie są główne cechy stali niskostopowej?", a: 'a', options: ['Wysoka wytrzymałość przy małej wadze', 'Niska twardość', 'Wysoka kruchość', 'Duża gęstość'] },
-{ q: "Jakie są zalety stali stopowej?", a: 'b', options: ['Duża kruchość', 'Wysoka odporność na korozję i twardość', 'Niska wytrzymałość', 'Wysoka plastyczność'] },
-{ q: "Jakie są główne metody wytwarzania stali?", a: 'c', options: ['Odlewanie i spawanie', 'Proces wytwarzania', 'Wydobycie, przetwarzanie, produkcja', 'Chłodzenie i formowanie'] },
-{ q: "Jakie są skutki procesu 'węglowania' stali?", a: 'a', options: ['Zwiększenie twardości powierzchniowej', 'Zmniejszenie twardości', 'Zmniejszenie wytrzymałości', 'Zmiana koloru'] },
-{ q: "Jakie są główne cechy stali węglowej?", a: 'b', options: ['Niska twardość', 'Wysoka twardość i wytrzymałość', 'Duża kruchość', 'Niska plastyczność'] },
-{ q: "Jakie są główne zastosowania stali austenitycznej?", a: 'c', options: ['Narzędzia skrawające', 'Elementy konstrukcyjne', 'Przemysł chemiczny', 'Przemysł elektroniczny'] },
-{ q: "Co to jest 'spawanie elektryczne'?", a: 'd', options: ['Proces wytwarzania', 'Proces topnienia', 'Proces łączenia metali bez użycia ciepła', 'Proces łączenia materiałów z użyciem prądu elektrycznego'] },
-{ q: "Jakie są główne cechy stali kwasoodpornej?", a: 'a', options: ['Wysoka odporność na korozję', 'Niska wytrzymałość', 'Duża kruchość', 'Niska twardość'] },
-{ q: "Jakie są skutki procesu 'hartowania' stali?", a: 'c', options: ['Zmniejszenie twardości', 'Zmiana koloru', 'Zwiększenie twardości', 'Wzrost plastyczności'] },
-{ q: "Jakie są podstawowe metody kształtowania metali?", a: 'b', options: ['Tłoczenie', 'Kucie i walcowanie', 'Spawanie i malowanie', 'Odlewanie i formowanie'] },
-{ q: "Jakie są główne metody obróbki cieplnej?", a: 'd', options: ['Malowanie i wytłaczanie', 'Spawanie i chłodzenie', 'Proces wytwarzania', 'Hartowanie i odpuszczanie'] },
-{ q: "Jakie są właściwości stali stopowej?", a: 'c', options: ['Niska twardość', 'Duża kruchość', 'Wysoka odporność na korozję', 'Wysoka plastyczność'] },
-{ q: "Jakie są główne zastosowania stali stopowej?", a: 'b', options: ['Przemysł chemiczny', 'Narzędzia skrawające i elementy konstrukcyjne', 'Produkcja odzieży', 'Produkcja biżuterii'] },
-{ q: "Jakie są główne cechy stali narzędziowej?", a: 'a', options: ['Wysoka twardość i odporność na zużycie', 'Duża kruchość', 'Niska wytrzymałość', 'Niska plastyczność'] },
-{ q: "Jakie są skutki wprowadzenia niklu do stopów stali?", a: 'b', options: ['Zmniejszenie twardości', 'Zwiększenie odporności na korozję', 'Wzrost kruchości', 'Zmniejszenie plastyczności'] },
-{ q: "Jakie są efekty podgrzewania metali do wysokich temperatur?", a: 'c', options: ['Wzrost twardości', 'Zmniejszenie plastyczności', 'Zmiana struktury ziaren', 'Zmiana koloru'] },
-{ q: "Jakie są główne metody badania twardości metali?", a: 'a', options: ['Metoda Rockwella', 'Metoda chemiczna', 'Metoda optyczna', 'Metoda mechaniczna'] },
-{ q: "Jakie są główne zastosowania stali nierdzewnej?", a: 'c', options: ['Tylko w budownictwie', 'W przemyśle spożywczym', 'W produkcji urządzeń medycznych', 'Tylko w elektronice'] },
-{ q: "Co to jest 'spawanie MIG/MAG'?", a: 'b', options: ['Proces wytwarzania', 'Proces spawania z użyciem gazu osłonowego', 'Proces odlewania', 'Proces chłodzenia'] },
-{ q: "Jakie są główne właściwości stali konstrukcyjnej?", a: 'b', options: ['Wysoka kruchość', 'Wysoka wytrzymałość', 'Niska twardość', 'Duża gęstość'] },
-{ q: "Jakie są główne cechy stopów aluminium?", a: 'a', options: ['Niska gęstość i wysoka odporność na korozję', 'Wysoka twardość', 'Duża kruchość', 'Niska plastyczność'] },
-{ q: "Jakie są skutki 'przegrzania' stali?", a: 'c', options: ['Zmniejszenie twardości', 'Wzrost plastyczności', 'Zmniejszenie wytrzymałości', 'Zmiana koloru'] },
-{ q: "Co to jest 'metoda spawania'?", a: 'd', options: ['Proces odlewania', 'Proces formowania metali', 'Proces chłodzenia', 'Proces łączenia materiałów z użyciem ciepła'] },
-{ q: "Jakie są efekty dodania manganu do stali?", a: 'a', options: ['Zwiększenie twardości', 'Zmniejszenie plastyczności', 'Wzrost kruchości', 'Zmniejszenie wytrzymałości'] },
-{ q: "Jakie są główne zastosowania stali nierdzewnej?", a: 'b', options: ['Wytwarzanie narzędzi skrawających', 'Przemysł chemiczny', 'Produkcja biżuterii', 'Budownictwo'] },
-{ q: "Jakie są główne cechy stali stopowej?", a: 'c', options: ['Wysoka kruchość', 'Niska twardość', 'Wysoka odporność na korozję', 'Niska plastyczność'] },
-{ q: "Jakie są skutki procesu 'hartowania' dla stali?", a: 'd', options: ['Zmniejszenie twardości', 'Zmiana koloru', 'Zmniejszenie plastyczności', 'Zwiększenie twardości'] },
-{ q: "Jakie są główne metody wykrywania wad w materiałach metalowych?", a: 'b', options: ['Analiza chemiczna', 'Badania nieniszczące', 'Metoda wizualna', 'Badania mikrostrukturalne'] },
-{ q: "Jakie są główne zalety stali martenzytycznej?", a: 'a', options: ['Wysoka twardość', 'Wysoka plastyczność', 'Duża kruchość', 'Niska wytrzymałość'] },
-{ q: "Jakie są główne cechy stali austenitycznej?", a: 'c', options: ['Niska odporność na korozję', 'Duża kruchość', 'Wysoka plastyczność i odporność na korozję', 'Niska twardość'] },
-{ q: "Jakie są podstawowe metody obróbki stali?", a: 'd', options: ['Hartowanie', 'Odlewanie', 'Wytłaczanie', 'Kucie, walcowanie, hartowanie'] },
-{ q: "Jakie są główne metody badania twardości stali?", a: 'a', options: ['Metoda Rockwella', 'Metoda chemiczna', 'Metoda optyczna', 'Metoda mechaniczna'] },
-{ q: "Jakie są główne właściwości stali stopowej?", a: 'c', options: ['Wysoka twardość', 'Niska wytrzymałość', 'Wysoka odporność na korozję', 'Wysoka plastyczność'] },
-{ q: "Jakie są główne cechy stali kwasoodpornej?", a: 'b', options: ['Niska twardość', 'Wysoka odporność na korozję', 'Duża kruchość', 'Niska wytrzymałość'] },
-{ q: "Jakie są główne zastosowania stali węglowej?", a: 'a', options: ['Budownictwo i przemysł maszynowy', 'Produkcja biżuterii', 'Przemysł chemiczny', 'Wytwarzanie narzędzi'] },
-{ q: "Jakie są skutki podgrzewania stali do wysokich temperatur?", a: 'b', options: ['Zmiana koloru', 'Zmiana struktury ziaren', 'Wzrost plastyczności', 'Zmniejszenie twardości'] },
-{ q: "Jakie są główne metody produkcji stali?", a: 'c', options: ['Odlewanie', 'Wytłaczanie', 'Wydobycie, przetwarzanie, produkcja', 'Spawanie'] },
-{ q: "Jakie są główne cechy stali sprężynowej?", a: 'd', options: ['Duża kruchość', 'Niska twardość', 'Niska wytrzymałość', 'Wysoka elastyczność i sprężystość'] },
-{ q: "Jakie są skutki 'nawęglania' stali?", a: 'a', options: ['Zwiększenie twardości powierzchniowej', 'Zmniejszenie twardości', 'Zmniejszenie wytrzymałości', 'Zmiana koloru'] },
-{ q: "Jakie są efekty wprowadzenia molibdenu do stali?", a: 'c', options: ['Zmniejszenie twardości', 'Zmniejszenie plastyczności', 'Zwiększenie odporności na ciepło', 'Zmniejszenie wytrzymałości'] },
-{ q: "Jakie są główne cechy stali wysokostopowej?", a: 'b', options: ['Niska twardość', 'Wysoka odporność na korozję i wysoką temperaturę', 'Duża kruchość', 'Niska wytrzymałość'] },
-{ q: "Jakie są główne metody detekcji wad w materiałach metalowych?", a: 'b', options: ['Użycie mikroskopu', 'Metody nieniszczące', 'Zwykła obserwacja', 'Analiza chemiczna'] },
-/// here add more..
+            { q: "Które z poniższych stwierdzeń NIE jest prawdziwe w przypadku osi krystalograficznych?", a: 'a', options: ['muszą być do siebie wzajemnie prostopadłe', 'są równoległe do krawędzi komórki elementarnej', 'wychodzą z jednego z wierzchołków komórki', 'tworzą prawoskrętny układ współrzędnych'] },
+            { q: "Odmiany alotropowe żelaza: (Fe-α) oraz (Fe-δ) mają następujące struktury krystaliczne:", a: 'd', options: ['odpowiednio RPC (A2) i HZ (A3)', 'obie posiadają strukturę RSC (A1)', 'obie posiadają strukturę RPC (A2)', 'odpowiednio RSC (A1) i RPC (A2)'] },
+            // Add more questions here...
         ];
 
-        // Shuffle function for array
         function shuffle(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -339,14 +144,12 @@
             }
         }
 
-        // Pick random 30 questions from the base
         function pickRandomQuestions() {
             const shuffledQuestions = [...baseQuestions];
             shuffle(shuffledQuestions);
-            return shuffledQuestions.slice(0, totalQuestions);  // Pick the first 30 questions
+            return shuffledQuestions.slice(0, totalQuestions);
         }
 
-        // Render the quiz form
         function renderQuiz() {
             selectedQuestions = pickRandomQuestions();
 
@@ -354,21 +157,21 @@
             selectedQuestions.forEach((question, index) => {
                 const questionDiv = document.createElement('div');
                 questionDiv.classList.add('question');
-                questionDiv.id = `question${index}`; // Give each question a unique ID
+                questionDiv.id = `question${index}`;
 
                 const questionText = document.createElement('h3');
                 questionText.textContent = `${index + 1}. ${question.q}`;
                 questionDiv.appendChild(questionText);
 
-                // Shuffle the answer options for each question
                 const options = [...question.options];
                 shuffle(options);
 
                 options.forEach((option) => {
                     const label = document.createElement('label');
-                    label.innerHTML = `<input type="radio" name="q${index}" value="${option}"> ${option}`;
+                    label.innerHTML = `${option}`;
+                    label.dataset.answer = option;
+                    label.onclick = () => selectAnswer(index, option, label);
                     questionDiv.appendChild(label);
-                    questionDiv.appendChild(document.createElement('br'));
                 });
 
                 const feedback = document.createElement('div');
@@ -379,66 +182,54 @@
                 const checkButton = document.createElement('button');
                 checkButton.textContent = 'Sprawdź';
                 checkButton.type = 'button';
-                checkButton.onclick = () => checkAnswer(index, question.a); // Pass correct answer
+                checkButton.onclick = () => checkAnswer(index, question.a);
                 questionDiv.appendChild(checkButton);
 
                 quizForm.appendChild(questionDiv);
             });
 
-            showQuestion(0); // Show the first question
+            showQuestion(0);
         }
 
-        // Show the current question based on index
+        function selectAnswer(index, selectedAnswer, label) {
+            document.querySelectorAll(`label[data-answer]`).forEach(el => el.style.backgroundColor = "#444");
+            label.style.backgroundColor = "#666";
+        }
+
         function showQuestion(index) {
             if (index < 0 || index >= selectedQuestions.length) return;
 
-            // Hide all questions
             document.querySelectorAll('.question').forEach(q => q.style.display = 'none');
 
-            // Show the current question
             document.getElementById(`question${index}`).style.display = 'block';
             currentQuestion = index;
 
-            // Show/hide navigation buttons
             document.getElementById('backButton').style.display = currentQuestion === 0 ? 'none' : 'inline';
             document.getElementById('nextButton').style.display = currentQuestion === selectedQuestions.length - 1 ? 'none' : 'inline';
             document.getElementById('submitButton').style.display = currentQuestion === selectedQuestions.length - 1 ? 'inline' : 'none';
         }
 
-        // Check the answer of a question
         function checkAnswer(index, correctAnswer) {
-            const selected = document.querySelector(`input[name="q${index}"]:checked`);
             const feedbackElement = document.getElementById(`feedback${index}`);
+            const correctAnswerText = selectedQuestions[index].options[correctAnswer.charCodeAt(0) - 97];
+            const selected = document.querySelector(`label[data-answer].selected`);
 
-            if (selected) {
-                // Compare selected value directly with the correctAnswer
-                if (selected.value === selectedQuestions[index].options[correctAnswer.charCodeAt(0) - 97]) {
-                    feedbackElement.textContent = "Dobrze!";
-                    feedbackElement.className = "result";
-                    score++;
-                } else {
-                    // Retrieve the full correct answer text from options
-                    const correctAnswerText = selectedQuestions[index].options[correctAnswer.charCodeAt(0) - 97];
-                    const questionText = selectedQuestions[index].q;
-                    feedbackElement.textContent = `${questionText} ${correctAnswerText}`;
-                    feedbackElement.className = "result incorrect";
-                }
+            if (selected && selected.dataset.answer === correctAnswerText) {
+                feedbackElement.textContent = "Dobrze!";
+                feedbackElement.className = "result";
+                score++;
             } else {
-                feedbackElement.textContent = "Proszę, wybierz odpowiedź.";
+                feedbackElement.textContent = `Nieprawidłowa odpowiedź! Poprawna to: ${correctAnswerText}`;
                 feedbackElement.className = "result incorrect";
             }
         }
 
-        // Submit the quiz and show final result
         function submitQuiz() {
-            const resultText = score >= (totalQuestions / 2) ?
-                               `Gratulacje! Zdałeś test z wynikiem: ${score}/${totalQuestions}.` :
-                               `Nie udało ci się uzyskać 50%. ${score}/${totalQuestions}.`;
+            const resultText = score >= (totalQuestions / 2) ? `Gratulacje! Zdałeś test z wynikiem: ${score}/${totalQuestions}.` : `Nie udało ci się uzyskać 50%. ${score}/${totalQuestions}.`;
 
             document.getElementById("finalResult").textContent = resultText;
         }
 
-        // Show the quiz when the page loads
         window.onload = function() {
             renderQuiz();
         };
