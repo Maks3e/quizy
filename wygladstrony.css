@@ -160,3 +160,21 @@ button:active {
         bottom: 10px;
     }
 }
+.answer-feedback {
+    margin-top: 10px;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #444;  /* Background for feedback */
+    color: white;  /* Text color */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);  /* 3D look */
+    display: none;  /* Initially hidden */
+}
+
+.answer-feedback.correct {
+    background-color: #2e7d32;  /* Green background for correct */
+}
+
+.answer-feedback.incorrect {
+    background-color: #c62828;  /* Red background for incorrect */
+}
