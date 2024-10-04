@@ -394,19 +394,26 @@
         }
 
         function checkAnswer(index, correctAnswer) {
-            const feedbackElement = document.getElementById(`feedback${index}`);
-            const correctAnswerText = selectedQuestions[index].options[correctAnswer.charCodeAt(0) - 97];
-            const selectedLabel = document.querySelector(`#question${index} label[style*="background-color: rgb(102, 102, 102)"]`);
+    const selected = document.querySelector(`input[name="q${index}"]:checked`);
+    const feedbackElement = document.getElementById(`feedback${index}`);
 
-            if (selectedLabel && selectedLabel.dataset.answer === correctAnswerText) {
-                feedbackElement.textContent = "Dobrze!";
-                feedbackElement.className = "result";
-                score++;
-            } else {
-                feedbackElement.textContent = `Nieprawidłowa odpowiedź! Poprawna to: ${correctAnswerText}`;
-                feedbackElement.className = "result incorrect";
-            }
+    if (selected) {
+        if (selected.value === selectedQuestions[index].options[correctAnswer.charCodeAt(0) - 97]) {
+            feedbackElement.textContent = "Dobrze!";
+            feedbackElement.className = "answer-feedback correct";
+        } else {
+            const correctAnswerText = selectedQuestions[index].options[correctAnswer.charCodeAt(0) - 97];
+            feedbackElement.textContent = `Błędnie. Poprawna odpowiedź to: ${correctAnswerText}`;
+            feedbackElement.className = "answer-feedback incorrect";
         }
+    } else {
+        feedbackElement.textContent = "Proszę wybrać odpowiedź.";
+        feedbackElement.className = "answer-feedback incorrect";
+    }
+
+    feedbackElement.style.display = "block";
+}
+
 
         function submitQuiz() {
             const resultText = score >= (totalQuestions / 2) ? `Gratulacje! Zdałeś test z wynikiem: ${score}/${totalQuestions}.` : `Nie udało ci się uzyskać 50%. ${score}/${totalQuestions}.`;
