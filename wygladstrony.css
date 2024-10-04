@@ -70,7 +70,7 @@ label:hover {
     font-size: 18px;
     font-weight: bold;
     position: fixed;
-    bottom: 4000px; /* Position above the navigation buttons */
+    bottom: 60px; /* Position above the navigation buttons */
     left: 50%;
     transform: translateX(-50%);
     width: calc(100% - 20px);
